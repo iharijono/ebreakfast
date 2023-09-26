@@ -4,11 +4,15 @@ Created on Fri Sept 22, 2023
 @author: Aristoteles
 '''
 
+import sys
+import json
+
 from flask import Flask, flash, render_template, redirect, url_for, request, session
 from module.database import Database
 
 
 app = Flask(__name__)
+app.secret_key = "mys3cr3tk3y"
 db = Database()
 
 @app.route('/')
@@ -23,12 +27,10 @@ def add():
 @app.route('/addcustomer', methods = ['POST', 'GET'])
 def addcustomer():
     if request.method == 'POST' and request.form['save']:
-        form_data = equest.form['save']
-        print(f'Form data: {form_data}')
         if db.insert(request.form):
-            flash("A new phone number has been added")
+            flash("A new customer has been added")
         else:
-            flash("A new phone number can not be added")
+            flash("A new customer can not be added")
 
         return redirect(url_for('index'))
     else:

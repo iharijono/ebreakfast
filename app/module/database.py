@@ -3,6 +3,7 @@ Created on Fri Sep 22, 2017
 
 @author: Aristoteles
 '''
+import json
 
 import pymysql
 
@@ -19,11 +20,14 @@ class Database:
             if id == None:
                 cursor.execute("SELECT * FROM customers order by id asc")
             else:
+                # print(f"SELECT * FROM customers where id = '{id}'")
                 cursor.execute(
-                    "SELECT * FROM customers where id = '%s' order by name asc", (id,))
+                    f"SELECT * FROM customers where id = '{id}'")
+                # cursor.execute("SELECT * FROM customers order by id asc")
 
             return cursor.fetchall()
         except:
+            print(f'Error in reading Database', flush=True)
             return ()
         finally:
             con.close()
@@ -39,6 +43,7 @@ class Database:
 
             return True
         except:
+            print(f'Error in inserting Data: {json.dumps(data)}', flush=True)
             con.rollback()
 
             return False
@@ -50,12 +55,13 @@ class Database:
         cursor = con.cursor()
 
         try:
-            cursor.execute("UPDATE phone_book set name = %s, phone = %s, address = %s where id = %s",
-                           (data['name'], data['phone'], data['address'], id,))
+            cursor.execute("UPDATE customers set email = %s, phone = %s, birthdate = %s where id = %s",
+                           (data['id'], data['email'], data['phone'], data['birthdate'], id,))
             con.commit()
 
             return True
         except:
+            print(f'Error in updating ID: {id}, Data: {json.dumps(data)}', flush=True)
             con.rollback()
 
             return False
@@ -67,11 +73,12 @@ class Database:
         cursor = con.cursor()
 
         try:
-            cursor.execute("DELETE FROM phone_book where id = %s", (id,))
+            cursor.execute(f"DELETE FROM customers where id = {id}")
             con.commit()
 
             return True
         except:
+            print(f'Error in deleting ID: {id}', flush=True)
             con.rollback()
 
             return False
