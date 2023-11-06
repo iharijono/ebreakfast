@@ -1,6 +1,8 @@
 # Description
 For my project
 
+Aristotelis edited this
+
 # Requirements:
 1. docker (and docker-compose)
 2. mysql client on the host
