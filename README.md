@@ -39,7 +39,7 @@ mysql> source sql/deinit.sql
 5. Connect to the app with the browser pointing to http://localhost:5000
 ```
 open http://localhost:8765
-Login with 'customer_id_1' and password is 'secret'
+Login with 'test' and password is 'secret'
 ```
 
 # Clean up
