@@ -21,10 +21,18 @@ CREATE TABLE IF NOT EXISTS customers (
   email VARCHAR(20),
   phone VARCHAR(20),
   birthdate DATE,
+  password VARCHAR(80),
   address_fk INT NOT NULL,
   FOREIGN KEY (address_fk)
     REFERENCES addresses (id)
     ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS admins (
+  id VARCHAR(20) PRIMARY KEY,
+  email VARCHAR(20),
+  phone VARCHAR(20),
+  password VARCHAR(80)
 );
 
 CREATE TABLE IF NOT EXISTS paymentmethods (

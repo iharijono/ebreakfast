@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling >=0.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ui"
+license = {file = "LICENSE"}
+classifiers = ["License :: OSI Approved :: MIT License"]
+dynamic = ["version", "description"]
+dependencies = [
+    "solara",
+    "pymysql",
+    "SQLAlchemy",
+    "simple_websocket",
+    "flask_sock",
+]
+
+[tool.hatch.version]
+path = "ui/__init__.py"
+
+
+
+[project.urls]
+Home = "https://www.github.com/Aristoteles"
+
+[tool.black]
+line-length = 160
+
+[tool.isort]
+profile = "black"

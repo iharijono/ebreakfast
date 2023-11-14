@@ -25,17 +25,31 @@ VALUES
     ('creditcard_id_8', '0000000000000008', '00008'),
     ('creditcard_id_9', '0000000000000009', '00009');
 
-INSERT INTO customers (id, email, phone, birthdate, address_fk)
+INSERT INTO customers (id, email, phone, password, birthdate, address_fk)
 VALUES
-    ('customer_id_1', 'email1', '4086666661', '2001-7-04', 1),
-    ('customer_id_2', 'email2', '4086666662', '2002-7-04', 2),
-    ('customer_id_3', 'email3', '4086666663', '2003-7-04', 3),
-    ('customer_id_4', 'email4', '4086666664', '2004-7-04', 4),
-    ('customer_id_5', 'email5', '4086666665', '2005-7-04', 5),
-    ('customer_id_6', 'email6', '4086666666', '2006-7-04', 6),
-    ('customer_id_7', 'email7', '4086666667', '2007-7-04', 7),
-    ('customer_id_8', 'email8', '4086666668', '2008-7-04', 8),
-    ('customer_id_9', 'email9', '4086666669', '2009-7-04', 9);
+    ('test', 'test@email.com', '4086666661', 'secret', '2001-7-04', 1),
+    ('customer_id_1', 'email1', '4086666662', 'secret', '2002-7-04', 2),
+    ('customer_id_2', 'email2', '4086666662', 'secret', '2002-7-04', 2),
+    ('customer_id_3', 'email3', '4086666663', 'secret', '2003-7-04', 3),
+    ('customer_id_4', 'email4', '4086666664', 'secret', '2004-7-04', 4),
+    ('customer_id_5', 'email5', '4086666665', 'secret', '2005-7-04', 5),
+    ('customer_id_6', 'email6', '4086666666', 'secret', '2006-7-04', 6),
+    ('customer_id_7', 'email7', '4086666667', 'secret', '2007-7-04', 7),
+    ('customer_id_8', 'email8', '4086666668', 'secret', '2008-7-04', 8),
+    ('customer_id_9', 'email9', '4086666669', 'secret', '2009-7-04', 9);
+
+INSERT INTO admins (id, email, phone, password)
+VALUES
+    ('admin', 'admin@email.com', '4086666661', 'secret'),
+    ('admin_1', 'email1@email.com', '4086666661', 'secret'),    
+    ('admin_2', 'email2@email.com', '4086666662', 'secret'),
+    ('admin_3', 'email3@email.com', '4086666663', 'secret'),
+    ('admin_4', 'email4@email.com', '4086666664', 'secret'),
+    ('admin_5', 'email5@email.com', '4086666665', 'secret'),
+    ('admin_6', 'email6@email.com', '4086666666', 'secret'),
+    ('admin_7', 'email7@email.com', '4086666667', 'secret'),
+    ('admin_8', 'email8@email.com', '4086666668', 'secret'),
+    ('admin_9', 'email9@email.com', '4086666669', 'secret');
 
 INSERT INTO  paymentmethods (customer_fk, creditcard_fk)
 VALUES

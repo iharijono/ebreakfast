@@ -9,9 +9,12 @@ import json
 
 from flask import Flask, flash, render_template, redirect, url_for, request, session
 from module.database import Database
+import solara.server.flask
 
 
 app = Flask(__name__)
+app.register_blueprint(solara.server.flask.blueprint, url_prefix="/solara/")
+
 app.secret_key = "mys3cr3tk3y"
 db = Database()
 

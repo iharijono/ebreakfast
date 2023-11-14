@@ -1,8 +1,5 @@
 # Description
-For my project
-
-Aristotelis edited this
-second try
+For my school project
 
 # Requirements:
 1. docker (and docker-compose)
@@ -41,7 +38,8 @@ mysql> source sql/deinit.sql
 ```
 5. Connect to the app with the browser pointing to http://localhost:5000
 ```
-open http://localhost:5000
+open http://localhost:8765
+Login with 'customer_id_1' and password is 'secret'
 ```
 
 # Clean up
@@ -49,7 +47,7 @@ open http://localhost:5000
 ```
 docker compose down
 ```
-2. Delete database ALL (be careful!!!)
+2. Delete database ALL (be careful!!! no need to do actually)
 ```
 docker compose down
 rm -rf database
