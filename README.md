@@ -28,6 +28,7 @@ after everything is up (check with 'docker ps -a')
 4. Initialize the Database
 ```
 mysql -h 127.0.0.1 -uroot -proot
+mysql> source sql/deinit.sql
 mysql> source sql/init.sql
 mysql> source sql/data.sql
 ```
