@@ -5,6 +5,9 @@ services:
         container_name: ebreakfast-app
         build: app
         restart: always
+        environment:
+            MYSQL_HOST: db
+            MYSQL_DB: ebreakfast_db
         ports:
             - '8765:8765'
         volumes:

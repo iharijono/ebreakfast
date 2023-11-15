@@ -9,15 +9,9 @@ from typing import Optional, cast
 import json
 from ..models import models
 
-from sqlalchemy import create_engine, select
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoResultFound
-# # from sqlalchemy.ext.declarative import declarative_base
-# from sqlalchemy.orm import declarative_base
-
-
-# engine = create_engine("mysql+pymysql://root:root@localhost/ebreakfast_db", echo=True, future=True)
-engine = create_engine("mysql+pymysql://root:root@localhost/ebreakfast_db", future=True, echo=True)
 
 @dataclasses.dataclass
 class User:
@@ -37,7 +31,7 @@ def is_password_correct(customer, pwd):
 def login(username: str, password: str):
     # this function can be replace by a custom username/password check
     stmt = select(models.Customer).where(models.Customer.id == username)
-    with Session(engine) as session:
+    with Session(models.myengine()) as session:
         try:
             customer = session.scalars(stmt).one()
             is_password_correct(customer, password)
@@ -76,11 +70,6 @@ def Layout(children=[]):
     route, routes = solara.use_route(peek=True)
     if route is None:
         return solara.Error("Route not found")
-
-    # print(f'ROUTE => {route}\n\n')
-    # print(f'ROUTES => {routes}\n\n')
-    # print(f'CHILDREN => {children}')
-    # children = check_auth(route, children)
 
     with solara.AppLayout(children=children, navigation=True):
         with solara.AppBar():
