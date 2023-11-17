@@ -8,14 +8,16 @@ import dataclasses
 from typing import Optional, cast
 import json
 from ..models import models
-from .components.basket import basket, add_to_basket
-from ..data import menus
-from ..basket import add_to_basket
 
-
-from sqlalchemy import select
+from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoResultFound
+# # from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.orm import declarative_base
+
+
+# engine = create_engine("mysql+pymysql://root:root@localhost/ebreakfast_db", echo=True, future=True)
+engine = create_engine("mysql+pymysql://root:root@localhost/ebreakfast_db", future=True, echo=True)
 
 @dataclasses.dataclass
 class User:
@@ -35,7 +37,7 @@ def is_password_correct(customer, pwd):
 def login(username: str, password: str):
     # this function can be replace by a custom username/password check
     stmt = select(models.Customer).where(models.Customer.id == username)
-    with Session(models.myengine()) as session:
+    with Session(engine) as session:
         try:
             customer = session.scalars(stmt).one()
             is_password_correct(customer, password)
@@ -75,6 +77,11 @@ def Layout(children=[]):
     if route is None:
         return solara.Error("Route not found")
 
+    # print(f'ROUTE => {route}\n\n')
+    # print(f'ROUTES => {routes}\n\n')
+    # print(f'CHILDREN => {children}')
+    # children = check_auth(route, children)
+
     with solara.AppLayout(children=children, navigation=True):
         with solara.AppBar():
             with solara.lab.Tabs(align="center"):
@@ -100,32 +107,8 @@ def Page():
     with solara.ColumnsResponsive(6, large=4) as main:
         solara.Title("ebreakfast » Sign In")
         LoginForm()
-        MenuPage()  # Added the MenuPage component
-        Basket()    # Added the Basket component
     # solara.Markdown("This page is visible for everyone")
 
     # solara.Markdown(__doc__)
 
     # return main
-
-@solara.component
-def MenuItemCard(menu_name):
-    with solara.Card(max_width="400px") as main:
-        with solara.CardImage(top=True):
-            solara.Img(height="250", src=menus[menu_name].image_url)
-        solara.CardTitle(children=[menus[menu_name].title])
-        with solara.CardText():
-            solara.Markdown(f"Price: {menus[menu_name].price}")
-            solara.Button("Add to Basket", on_click=lambda: add_to_basket(menu_name))
-    return main
-
-@solara.component
-def MenuPage():
-    with solara.ColumnsResponsive(12) as main:
-        with solara.Card("Menus"):
-            with solara.ColumnsResponsive(12, small=6, large=4):
-                for menu_name in menus:
-                    MenuItemCard(menu_name)
-        Basket()  
-    return main
-
