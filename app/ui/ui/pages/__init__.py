@@ -8,6 +8,10 @@ import dataclasses
 from typing import Optional, cast
 import json
 from ..models import models
+from .components.basket import basket, add_to_basket
+from ..data import menus
+from ..basket import add_to_basket
+
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -96,8 +100,32 @@ def Page():
     with solara.ColumnsResponsive(6, large=4) as main:
         solara.Title("ebreakfast » Sign In")
         LoginForm()
+        MenuPage()  # Added the MenuPage component
+        Basket()    # Added the Basket component
     # solara.Markdown("This page is visible for everyone")
 
     # solara.Markdown(__doc__)
 
     # return main
+
+@solara.component
+def MenuItemCard(menu_name):
+    with solara.Card(max_width="400px") as main:
+        with solara.CardImage(top=True):
+            solara.Img(height="250", src=menus[menu_name].image_url)
+        solara.CardTitle(children=[menus[menu_name].title])
+        with solara.CardText():
+            solara.Markdown(f"Price: {menus[menu_name].price}")
+            solara.Button("Add to Basket", on_click=lambda: add_to_basket(menu_name))
+    return main
+
+@solara.component
+def MenuPage():
+    with solara.ColumnsResponsive(12) as main:
+        with solara.Card("Menus"):
+            with solara.ColumnsResponsive(12, small=6, large=4):
+                for menu_name in menus:
+                    MenuItemCard(menu_name)
+        Basket()  
+    return main
+
