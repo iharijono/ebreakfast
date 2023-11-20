@@ -107,14 +107,20 @@ t_ordermeals = Table(
     Column('meal_fk', ForeignKey('meals.id', ondelete='CASCADE'), nullable=False, index=True)
 )
 
-MYSQL_HOST=os.environ.get("MYSQL_HOST", "localhost")
-MYSQL_USER=os.environ.get("MYSQL_USER", "root")
-MYSQL_PWD=os.environ.get("MYSQL_PWD", "root")
-MYSQL_DB=os.environ.get("MYSQL_DB", "ebreakfast_db")
-MYSQL_ECHO=os.environ.get("MYSQL_ECHO", "False").lower() in ["true", "yes", "1"]
-engine = create_engine(f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PWD}@{MYSQL_HOST}/{MYSQL_DB}", future=True, echo=MYSQL_ECHO)
-
+engine = None
 def myengine():
+    global engine
+    if engine is None:
+        MYSQL_HOST=os.environ.get("MYSQL_HOST", "db")
+        print(f'MYSQL_HOST = {MYSQL_HOST}')
+
+        MYSQL_USER=os.environ.get("MYSQL_USER", "root")
+        MYSQL_PWD=os.environ.get("MYSQL_PWD", "root")
+        MYSQL_DB=os.environ.get("MYSQL_DB", "ebreakfast_db")
+        MYSQL_ECHO=os.environ.get("MYSQL_ECHO", "False").lower() in ["true", "yes", "1"]
+        engine = create_engine(f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PWD}@{MYSQL_HOST}/{MYSQL_DB}", future=True, echo=MYSQL_ECHO)
+        print(f'ENGINE: mysql+pymysql://{MYSQL_USER}:{MYSQL_PWD}@{MYSQL_HOST}/{MYSQL_DB}')
+        
     return engine
 
 if __name__ == '__main__':
