@@ -15,10 +15,6 @@ from sqlalchemy.exc import NoResultFound
 # # from sqlalchemy.ext.declarative import declarative_base
 # from sqlalchemy.orm import declarative_base
 
-
-# engine = create_engine("mysql+pymysql://root:root@localhost/ebreakfast_db", echo=True, future=True)
-engine = create_engine("mysql+pymysql://root:root@localhost/ebreakfast_db", future=True, echo=True)
-
 @dataclasses.dataclass
 class User:
     username: str
@@ -37,7 +33,7 @@ def is_password_correct(customer, pwd):
 def login(username: str, password: str):
     # this function can be replace by a custom username/password check
     stmt = select(models.Customer).where(models.Customer.id == username)
-    with Session(engine) as session:
+    with Session(models.myengine()) as session:
         try:
             customer = session.scalars(stmt).one()
             is_password_correct(customer, password)

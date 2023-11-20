@@ -25,7 +25,11 @@ services:
         ports:
             - '3306:3306'
         volumes:
-            - ./database:/var/lib/mysql
+            # - ./database:/var/lib/mysql
+            # Use this option to persist the MySQL DBs in a shared volume.
+            - ./mysqldata:/var/lib/mysql:rw,delegated
+            # Use this option to persist the MySQL DBs in a data volume.
+            # - db_data:/var/lib/mysql
         networks:
             - backend
 
