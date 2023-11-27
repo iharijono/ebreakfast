@@ -103,8 +103,3 @@ def Page():
     with solara.ColumnsResponsive(6, large=4) as main:
         solara.Title("ebreakfast » Sign In")
         LoginForm()
-    # solara.Markdown("This page is visible for everyone")
-
-    # solara.Markdown(__doc__)
-
-    # return main
