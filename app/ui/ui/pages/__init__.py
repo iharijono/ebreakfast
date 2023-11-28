@@ -15,6 +15,8 @@ from sqlalchemy.exc import NoResultFound
 # # from sqlalchemy.ext.declarative import declarative_base
 # from sqlalchemy.orm import declarative_base
 
+from ..components.order import order, order_submitted
+
 @dataclasses.dataclass
 class User:
     username: str
@@ -29,6 +31,8 @@ def is_password_correct(customer, pwd):
         login_failed.value = False
         user.value = User(customer.id, admin=False)
         login_msg.value = 'You are successfully signed in'
+    else:
+        order.value = None
 
 def login(username: str, password: str):
     # this function can be replace by a custom username/password check
@@ -44,9 +48,6 @@ def login(username: str, password: str):
                 is_password_correct(customer, password)
             except NoResultFound:
                 login_msg.value = 'No User found'
-            
-def register():
-    print('register')
 
 @solara.component
 def LoginForm():
@@ -64,7 +65,6 @@ def LoginForm():
         solara.InputText(label="Password", password=True, value=password)
         solara.Button(label="Login", on_click=lambda: login(username.value, password.value))
         solara.Markdown("")
-        solara.Button(label="Register", disabled=True, on_click=lambda: register())
         solara.Markdown(f"{login_msg.value}")
 
 @solara.component
@@ -85,9 +85,14 @@ def Layout(children=[]):
                     name = route.path if route.path != "/" else "Sign In"
                     disabled = False
                     if not user.value:
-                        disabled = route.path == "order"
+                        disabled = (route.path == "order" or route.path == "checkout")
                     else:
-                        disabled = route.path == "admin"
+                        if route.path == "admin":
+                            disabled = route.path == "admin"
+                        else:
+                            if not order_submitted.value:
+                                disabled = route.path == "checkout"
+                            
                     solara.lab.Tab(name, path_or_route=route, disabled=disabled)
             if user.value:
                 solara.Text(f"Logged in as {user.value.username} as {'admin' if user.value.admin else 'user'}")
