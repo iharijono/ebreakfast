@@ -11,10 +11,11 @@ def MenuCard(name):
     quantity = solara.reactive(0)
 
     def increment():
-        quantity.value += 1
+        quantity.value +=1
 
     def decrement():
-        quantity.value -= 1
+        if quantity.value > 0:
+            quantity.value -= 1
 
     with rv.Card(max_width="400px") as main:
         # with solara.Link(f"/menu/{name}"):
@@ -26,7 +27,7 @@ def MenuCard(name):
             solara.Button("add", color="green", icon_name="add", on_click=increment)
             solara.Info(f"value: {quantity.value}")
             solara.Button("min", color="green", icon_name="remove", on_click=decrement)
-
+          
     return main
 
 
@@ -37,4 +38,12 @@ def Overview():
             with solara.ColumnsResponsive(12, small=6, large=4):
                 for name in menus:
                     MenuCard(name)
+
+# Add a button at the end of the page to confirm changes
+        with solara.Row(justify="flex-end", margin=10):
+            confirm_button = solara.Button("Confirm Changes", on_click=confirm_changes)
+            
     return main
+
+def confirm_changes():
+    print("Changes confirmed!")
