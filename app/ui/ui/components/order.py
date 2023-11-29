@@ -7,16 +7,15 @@ from ..data import menus
 def MenuCard(name):
     menu = menus[name]
 
-    # Reactive variable to store the quantity
-    quantity = solara.reactive(0)
+    quantity, set_quantity = solara.use_state(0)
 
     def increment():
-        quantity.value +=1
+        set_quantity(quantity + 1)
 
     def decrement():
-        if quantity.value > 0:
-            quantity.value -= 1
-
+        if quantity > 0:
+            set_quantity(quantity - 1)
+            
     with rv.Card(max_width="400px") as main:
         # with solara.Link(f"/menu/{name}"):
         rv.Img(height="250", src=menu.image_url)
@@ -25,8 +24,8 @@ def MenuCard(name):
             solara.Markdown(menu.markdown)
         with solara.Row(justify="space-around", margin=10):
             solara.Button("add", color="green", icon_name="add", on_click=increment)
-            solara.Info(f"value: {quantity.value}")
-            solara.Button("min", color="green", icon_name="remove", on_click=decrement)
+            solara.Info(f"value: {quantity}")
+            solara.Button("min", color="red", icon_name="remove", on_click=decrement)
           
     return main
 
@@ -41,7 +40,7 @@ def Overview():
 
 # Add a button at the end of the page to confirm changes
         with solara.Row(justify="flex-end", margin=10):
-            confirm_button = solara.Button("Confirm Changes", on_click=confirm_changes)
+            confirm_button = solara.Button("Confirm Changes", color="blue", on_click=confirm_changes)
             
     return main
 
