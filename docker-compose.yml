@@ -13,7 +13,7 @@ services:
         volumes:
             - ./app:/app
         networks:
-            - backend
+           - backend
 
     db:
         container_name: db

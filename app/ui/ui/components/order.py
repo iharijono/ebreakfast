@@ -57,3 +57,6 @@ def Overview(user):
                     MenuCard(name, menus[name])
     order_submitted.value = True
     return main
+
+def confirm_changes():
+    print("Changes confirmed!")
