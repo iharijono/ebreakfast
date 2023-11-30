@@ -41,6 +41,7 @@ def login(username: str, password: str):
         try:
             customer = session.scalars(stmt).one()
             is_password_correct(customer, password)
+            print(f'USER => {user.value}')
         except NoResultFound:
             stmt = select(models.Customer).where(models.Customer.email == username)
             try:

@@ -3,7 +3,7 @@ import solara
 import dataclasses
 from typing import Optional, cast
 
-from ..data import menus
+from ..models import models
 
 @dataclasses.dataclass
 class OrderItem:
@@ -20,8 +20,7 @@ order = solara.reactive(cast(Optional[Order], None))
 order_submitted = solara.reactive(False)
 
 @solara.component
-def MenuCard(name):
-    menu = menus[name]
+def MenuCard(name, menu):
     with rv.Card(max_width="400px") as main:
         # with solara.Link(f"/menu/{name}"):
         rv.Img(height="250", src=menu.image_url)
@@ -36,11 +35,12 @@ def MenuCard(name):
 @solara.component
 def Overview(user):
     print(f'order component: user => {user}')
-    order.value = Order(username=user.username, menuitems=[])
+    order.value = Order(username=user.username if user else '', menuitems=[])
+    menus = models.get_menus('ebreakfast')
     with solara.ColumnsResponsive(12) as main:
         with solara.Card("Menu"):
             with solara.ColumnsResponsive(12, small=6, large=4):
                 for name in menus:
-                    MenuCard(name)
+                    MenuCard(name, menus[name])
     order_submitted.value = True
     return main

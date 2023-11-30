@@ -6,7 +6,15 @@ from sqlalchemy.dialects.mysql import INTEGER
 from sqlalchemy.orm import relationship
 # from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base
+from sqlalchemy import select
+
+from sqlalchemy.orm import Session
+
 import os
+import dataclasses
+from typing import Any, Dict
+from pathlib import Path
+import yaml
 
 Base = declarative_base()
 metadata = Base.metadata
@@ -122,6 +130,55 @@ def myengine():
         print(f'ENGINE: mysql+pymysql://{MYSQL_USER}:{MYSQL_PWD}@{MYSQL_HOST}/{MYSQL_DB}')
         
     return engine
+
+@dataclasses.dataclass
+class Menu:
+    markdown: str
+    title: str
+    description: str
+    image_url: str
+    price: str
+
+# menus: Dict[str, Menu] = {}
+
+# for file in (HERE.parent / "content/menus").glob("*.md"):
+#     content = file.read_text()
+#     lines = [k.strip() for k in content.split("\n")]
+#     frontmatter_start = lines.index("---", 0)
+#     frontmatter_end = lines.index("---", frontmatter_start + 1)
+#     yamltext = "\n".join(lines[frontmatter_start + 1 : frontmatter_end - 2])
+#     metadata = yaml.safe_load(yamltext)
+#     markdown = "\n".join(lines[frontmatter_end + 1 :])
+#     menus[file.stem] = Menu(markdown=markdown, 
+#                             title=metadata["title"], 
+#                             description=metadata["description"], 
+#                             price=metadata["price"], 
+#                             image_url=metadata["image"])
+
+def get_menus(merchant):
+    print(f'merchant: {merchant}')
+    HERE = Path(__file__)
+    session = Session(engine)
+    stmt = select(Meal).where(Meal.restaurant_fk.in_([merchant]))
+    menus: Dict[str, Menu] = {}
+    for meal in session.scalars(stmt):
+        print(f'MEAL -> {meal}')
+
+    for file in (HERE.parent.parent / "content/menus").glob("*.md"):
+        content = file.read_text()
+        lines = [k.strip() for k in content.split("\n")]
+        frontmatter_start = lines.index("---", 0)
+        frontmatter_end = lines.index("---", frontmatter_start + 1)
+        yamltext = "\n".join(lines[frontmatter_start + 1 : frontmatter_end - 2])
+        metadata = yaml.safe_load(yamltext)
+        markdown = "\n".join(lines[frontmatter_end + 1 :])
+        menus[file.stem] = Menu(markdown=markdown, 
+                                title=metadata["title"], 
+                                description=metadata["description"], 
+                                price=metadata["price"], 
+                                image_url=metadata["image"])
+    return menus
+
 
 if __name__ == '__main__':
     from sqlalchemy.orm import Session
