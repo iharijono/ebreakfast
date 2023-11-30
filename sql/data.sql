@@ -79,7 +79,7 @@ VALUES
 -- RESTAURANT
 INSERT INTO restaurants (id, email, phone, merchant_fk)
 VALUES
-    ('restaurant_id_1', 'email1', '4086666661', 'merchant_id_1'),
+    ('ebreakfast', 'email@ebreakfast.com', '4086666661', 'merchant_id_1'),
     ('restaurant_id_2', 'email2', '4086666662', 'merchant_id_2'),
     ('restaurant_id_3', 'email3', '4086666663', 'merchant_id_3'),
     ('restaurant_id_4', 'email4', '4086666664', 'merchant_id_4'),
@@ -92,15 +92,15 @@ VALUES
 -- MEAL
 INSERT INTO meals (id, descr, price, restaurant_fk)
 VALUES
-    ('meal_id_1', 'desc_meal_1', 1.25, 'restaurant_id_1'),
-    ('meal_id_2', 'desc_meal_2', 2.25, 'restaurant_id_2'),
-    ('meal_id_3', 'desc_meal_3', 3.25, 'restaurant_id_3'),
-    ('meal_id_4', 'desc_meal_4', 4.25, 'restaurant_id_4'),
-    ('meal_id_5', 'desc_meal_5', 5.25, 'restaurant_id_5'),
-    ('meal_id_6', 'desc_meal_6', 6.25, 'restaurant_id_6'),
-    ('meal_id_7', 'desc_meal_7', 7.25, 'restaurant_id_7'),
-    ('meal_id_8', 'desc_meal_8', 8.25, 'restaurant_id_8'),
-    ('meal_id_9', 'desc_meal_9', 9.25, 'restaurant_id_9');
+    ('meal_id_1', 'desc_meal_1', 1.25, 'ebreakfast'),
+    ('meal_id_2', 'desc_meal_2', 2.25, 'ebreakfast'),
+    ('meal_id_3', 'desc_meal_3', 3.25, 'ebreakfast'),
+    ('meal_id_4', 'desc_meal_4', 4.25, 'ebreakfast'),
+    ('meal_id_5', 'desc_meal_5', 5.25, 'ebreakfast'),
+    ('meal_id_6', 'desc_meal_6', 6.25, 'ebreakfast'),
+    ('meal_id_7', 'desc_meal_7', 7.25, 'ebreakfast'),
+    ('meal_id_8', 'desc_meal_8', 8.25, 'ebreakfast'),
+    ('meal_id_9', 'desc_meal_9', 9.25, 'ebreakfast');
 
 -- ORDERS
 

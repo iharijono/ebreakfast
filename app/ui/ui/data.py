@@ -50,6 +50,8 @@ class Menu:
 
 menus: Dict[str, Menu] = {}
 
+
+
 for file in (HERE.parent / "content/menus").glob("*.md"):
     content = file.read_text()
     lines = [k.strip() for k in content.split("\n")]
@@ -58,4 +60,8 @@ for file in (HERE.parent / "content/menus").glob("*.md"):
     yamltext = "\n".join(lines[frontmatter_start + 1 : frontmatter_end - 2])
     metadata = yaml.safe_load(yamltext)
     markdown = "\n".join(lines[frontmatter_end + 1 :])
-    menus[file.stem] = Menu(markdown=markdown, title=metadata["title"], description=metadata["description"], price=metadata["price"], image_url=metadata["image"])
+    menus[file.stem] = Menu(markdown=markdown, 
+                            title=metadata["title"], 
+                            description=metadata["description"], 
+                            price=metadata["price"], 
+                            image_url=metadata["image"])

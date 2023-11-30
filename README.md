@@ -19,6 +19,18 @@ mkdir database
 2. assuming you are on directory 'ebreakfast', build the docker container (need only once unless you change the code)
 ```
 docker compose build --no-cache
+
+# if you want, you can clear all the images on your machine
+# windows cmd
+for /F %i in ('docker images -a -q') do docker rmi -f %i
+
+# windows powershell
+docker images -a -q | % { docker image rm $_ -f }
+
+# macos
+docker rmi -f $(docker images -aq)
+
+
 ```
 3. run all the containers
 ```
