@@ -55,6 +55,11 @@ def Overview(user):
             with solara.ColumnsResponsive(12, small=6, large=4):
                 for name in menus:
                     MenuCard(name, menus[name])
+                    
+# Add a button at the end of the page to confirm changes
+        with solara.Row(justify="flex-end", margin=10):
+            confirm_button = solara.Button("Confirm Changes", color="blue", on_click=confirm_changes)
+
     order_submitted.value = True
     return main
 
