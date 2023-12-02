@@ -6,8 +6,7 @@ from sqlalchemy.dialects.mysql import INTEGER
 from sqlalchemy.orm import relationship
 # from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base
-from sqlalchemy import select
-
+from sqlalchemy import select, insert
 from sqlalchemy.orm import Session
 
 import os
@@ -116,6 +115,7 @@ t_paymentmethods = Table(
 t_ordermeals = Table(
     'ordermeals', metadata,
     Column('order_fk', ForeignKey('orders.id', ondelete='CASCADE'), nullable=False, index=True),
+    Column("quantity", INTEGER),
     Column('meal_fk', ForeignKey('meals.id', ondelete='CASCADE'), nullable=False, index=True)
 )
 
@@ -184,10 +184,28 @@ def get_menus(merchant):
                                 image_url=metadata["image"])
     return menus
 
+def create_ordermeals(uid, meals):
+    # ORDER
+    o = Order(customer_fk=uid)
+    OID = None
+    en = myengine()
+    with Session(en) as session:
+        session.add(o)
+        session.commit()
+        OID = o.id
+    print(f'OID = {OID}, meals = {meals}')
+    for m in meals:
+        quantity = m['quantity']
+        meal_fk = m['meal_id']
+        stmt = insert(t_ordermeals).values(order_fk=OID, quantity=quantity,     meal_fk=meal_fk)
+        with en.connect() as conn:
+            result = conn.execute(stmt)
+            conn.commit()
+    return OID 
 
 if __name__ == '__main__':
     from sqlalchemy.orm import Session
-
+    OID = None
     # engine = create_engine("mysql+pymysql://root:root@localhost/ebreakfast_db", echo=True, future=True)
     engine = myengine()
     stmt = select(Meal).where(Meal.restaurant_fk == "ebreakfast")
@@ -217,3 +235,23 @@ if __name__ == '__main__':
         
         p = get_price('coffee')
         print(f'price = {p}')
+        
+        # ORDER
+        customer_id = 'test'
+        o = Order(customer_fk=customer_id)
+        session.add(o)
+        # session.flush()
+        session.commit()
+        # session.refresh(o)
+        OID = o.id
+        # print(f'NEW ID = {OID}')
+        
+    print(f'NEW ID = {OID}')    
+    meal_ids = ['burger', 'pancake', 'pizza']
+    for m in meal_ids:
+        stmt = insert(t_ordermeals).values(order_fk=OID, quantity=3, meal_fk=m)
+        en = myengine()
+        with en.connect() as conn:
+            result = conn.execute(stmt)
+            conn.commit()    
+        

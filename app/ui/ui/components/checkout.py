@@ -2,9 +2,11 @@ import reacton.ipyvuetify as rv
 import solara
 
 from .order import QUANTITY, ORDER
+from ..models import models
 
 USER = None
 order_purchased = solara.reactive(False)
+order_nr = solara.reactive(0)
 @solara.component
 def Overview(user):
     global USER
@@ -13,9 +15,18 @@ def Overview(user):
         if ORDER:
             order = ORDER[0]        
             u = USER.value
-            
-            order_purchased.value = True
-        
+            order_meals = []
+            for o in order.menuitems:
+                meal = {'meal_id': o.name,
+                        'quantity': o.quantity}
+                order_meals.append(meal)
+            oid = models.create_ordermeals(u.username, order_meals)   
+            if oid is None:
+                print(f'warning: failed in adding order')
+            else:
+                order_nr.value = oid
+                order_purchased.value = True
+
     with solara.ColumnsResponsive(12) as main:
         with solara.Card("Checkout"):
             # print(f'ORDER => {ORDER}')
@@ -59,7 +70,7 @@ def Overview(user):
                     
                 if order_purchased.value:
                     u = USER.value
-                    solara.Text(f"Order for user '{u.username}' with Nr is submitted successfully")
+                    solara.Text(f"Order for user '{u.username}' with Nr {order_nr.value} is submitted successfully")
 
 
     return main
