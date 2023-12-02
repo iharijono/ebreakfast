@@ -3,10 +3,18 @@ import solara
 
 from .order import QUANTITY, ORDER
 
+USER = None
+order_purchased = solara.reactive(False)
 @solara.component
-def Overview():
+def Overview(user):
+    global USER
+    USER = user
     def purchase():
-        print('increment')
+        if ORDER:
+            order = ORDER[0]        
+            u = USER.value
+            
+            order_purchased.value = True
         
     with solara.ColumnsResponsive(12) as main:
         with solara.Card("Checkout"):
@@ -27,10 +35,10 @@ def Overview():
                         name = o.name
                         quantity = o.quantity
                         if quantity > 0:
-                            subtotal = int(quantity) * float(price[1:])
+                            subtotal = int(quantity) * price
                             solara.Markdown(f"{cnt}")
                             solara.Markdown(f"{name}")
-                            solara.Markdown(f"{price}")
+                            solara.Markdown(f"${price}")
                             solara.Markdown(f"{quantity}")
                             solara.Markdown(f"${subtotal}")
                             total += subtotal
@@ -48,5 +56,10 @@ def Overview():
                     solara.Markdown(f"")
                     solara.Markdown(f"")
                     solara.Button(label="PURCHASE", color="primary", on_click=purchase)
+                    
+                if order_purchased.value:
+                    u = USER.value
+                    solara.Text(f"Order for user '{u.username}' with Nr is submitted successfully")
+
 
     return main

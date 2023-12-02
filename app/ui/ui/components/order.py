@@ -46,9 +46,8 @@ def MenuCard(name, menu):
             m.quantity = QUANTITY[name].value
             
     with rv.Card(max_width="400px") as main:
-        # with solara.Link(f"/menu/{name}"):
         rv.Img(height="250", src=menu.image_url)
-        rv.CardTitle(children=[menu.price])
+        rv.CardTitle(children=[f'${menu.price}'])
         with rv.CardText():
             solara.Markdown(menu.markdown)
         with solara.Row(justify="space-around", margin=10):
@@ -65,7 +64,7 @@ def Overview(user):
     if order is None:
         order = Order(username=user.username if user else '', menuitems=[])
         ORDER.insert(0, order)
-    menus = models.get_menus('ebreakfast')
+    menus = models.get_menus('ebreakfast')    
     with solara.ColumnsResponsive(12) as main:
         with solara.Card("Menu"):
             with solara.ColumnsResponsive(12, small=6, large=4):
@@ -76,7 +75,7 @@ def Overview(user):
                         q = QUANTITY.get(name, None)
                         if q is None:
                             QUANTITY[name] = solara.reactive(0)
-                        oitem = OrderItem(name=name, quantity=QUANTITY[name].value, price=menu.price)
+                        oitem = OrderItem(name=name, quantity=QUANTITY[name].value, price=float(menu.price))
                         order.menuitems.append(oitem)
                     MenuCard(name, menu)
                     

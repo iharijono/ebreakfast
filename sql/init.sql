@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS orders (
 
 CREATE TABLE IF NOT EXISTS ordermeals (
   order_fk INT NOT NULL,
+  quantity INT,
   meal_fk VARCHAR(20) NOT NULL,
   FOREIGN KEY (order_fk)
     REFERENCES orders (id)

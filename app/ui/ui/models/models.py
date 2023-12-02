@@ -91,7 +91,11 @@ class Meal(Base):
 
     restaurant = relationship('Restaurant')
     orders = relationship('Order', secondary='ordermeals')
-
+    def __repr__(self):
+        output = ''
+        for c in self.__table__.columns:
+            output += '{}: {}\n'.format(c.name, getattr(self, c.name))
+        return output
 
 class Order(Base):
     __tablename__ = 'orders'
@@ -139,30 +143,28 @@ class Menu:
     image_url: str
     price: str
 
-# menus: Dict[str, Menu] = {}
-
-# for file in (HERE.parent / "content/menus").glob("*.md"):
-#     content = file.read_text()
-#     lines = [k.strip() for k in content.split("\n")]
-#     frontmatter_start = lines.index("---", 0)
-#     frontmatter_end = lines.index("---", frontmatter_start + 1)
-#     yamltext = "\n".join(lines[frontmatter_start + 1 : frontmatter_end - 2])
-#     metadata = yaml.safe_load(yamltext)
-#     markdown = "\n".join(lines[frontmatter_end + 1 :])
-#     menus[file.stem] = Menu(markdown=markdown, 
-#                             title=metadata["title"], 
-#                             description=metadata["description"], 
-#                             price=metadata["price"], 
-#                             image_url=metadata["image"])
+menu_db = {}
+def get_price(name):
+    # print(f'get_price name = {name}')
+    if menu_db:
+        for k, v in menu_db.items():
+            # print(f'get_price name = {name} == {k}')
+            if k == name:
+                return v.price
+    return None
 
 def get_menus(merchant):
-    print(f'merchant: {merchant}')
+    global menu_db
     HERE = Path(__file__)
-    session = Session(engine)
-    stmt = select(Meal).where(Meal.restaurant_fk.in_([merchant]))
+    session = Session(myengine())
+    stmt = select(Meal).where(Meal.restaurant_fk == "ebreakfast")
     menus: Dict[str, Menu] = {}
-    for meal in session.scalars(stmt):
-        print(f'MEAL -> {meal}')
+    for meal in session.execute(stmt):
+        m = meal._asdict()['Meal']
+        p_str = "%.2f" % m.price
+        m.price = p_str
+        menu_db[m.id] = m
+        # print(f'MEAL -> {m}')
 
     for file in (HERE.parent.parent / "content/menus").glob("*.md"):
         content = file.read_text()
@@ -172,10 +174,13 @@ def get_menus(merchant):
         yamltext = "\n".join(lines[frontmatter_start + 1 : frontmatter_end - 2])
         metadata = yaml.safe_load(yamltext)
         markdown = "\n".join(lines[frontmatter_end + 1 :])
-        menus[file.stem] = Menu(markdown=markdown, 
+        stem = file.stem
+        price = get_price(stem)
+        # print(f'PRICE = {price}')
+        menus[stem] = Menu(markdown=markdown, 
                                 title=metadata["title"], 
                                 description=metadata["description"], 
-                                price=metadata["price"], 
+                                price=price if price else metadata["price"],
                                 image_url=metadata["image"])
     return menus
 
@@ -185,14 +190,30 @@ if __name__ == '__main__':
 
     # engine = create_engine("mysql+pymysql://root:root@localhost/ebreakfast_db", echo=True, future=True)
     engine = myengine()
+    stmt = select(Meal).where(Meal.restaurant_fk == "ebreakfast")
     with Session(engine) as session:
-        add1 = Address(street='street1011', city='city101', zip='55555')
-        cc1 = Creditcard(id='cc11112', numbers='444444444444444', zip='44444')
-        session.add(add1)
-        session.commit()  
-        session.add(cc1)
-        print(f'---> {add1.id}')
-        cust1 = Customer(id='cust11111', email='cust1@example.com', phone='3333333333', birthdate='2000-7-07', address_fk=add1.id)
-        session.add(cust1)
-        session.commit()
+        # add1 = Address(street='street1011', city='city101', zip='55555')
+        # cc1 = Creditcard(id='cc11112', numbers='444444444444444', zip='44444')
+        # session.add(add1)
+        # session.commit()  
+        # session.add(cc1)
+        # print(f'---> {add1.id}')
+        # cust1 = Customer(id='cust11111', email='cust1@example.com', phone='3333333333', birthdate='2000-7-07', address_fk=add1.id)
+        # session.add(cust1)
+        # session.commit()
+        
+        for meal in session.execute(stmt):
+            m = meal._asdict()['Meal']
+            p_str = "%.2f" % m.price
+            m.price = float(p_str)
+            menu_db[m.id] = m
+            # print(f'MEAL -> {m}')
+        
+        # for meal in session.execute(stmt):
+        #     m = meal._asdict()['Meal']
+        #     print(f'MEAL -> {m}')
 
+        # print(f'menu_db = {menu_db}')
+        
+        p = get_price('coffee')
+        print(f'price = {p}')

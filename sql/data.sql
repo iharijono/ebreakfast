@@ -92,40 +92,40 @@ VALUES
 -- MEAL
 INSERT INTO meals (id, descr, price, restaurant_fk)
 VALUES
-    ('meal_id_1', 'desc_meal_1', 1.25, 'ebreakfast'),
-    ('meal_id_2', 'desc_meal_2', 2.25, 'ebreakfast'),
-    ('meal_id_3', 'desc_meal_3', 3.25, 'ebreakfast'),
-    ('meal_id_4', 'desc_meal_4', 4.25, 'ebreakfast'),
-    ('meal_id_5', 'desc_meal_5', 5.25, 'ebreakfast'),
-    ('meal_id_6', 'desc_meal_6', 6.25, 'ebreakfast'),
+    ('burger', 'desc_meal_1', 10.25, 'ebreakfast'),
+    ('coffee', 'desc_meal_2', 2.25, 'ebreakfast'),
+    ('omelette', 'desc_meal_3', 13.25, 'ebreakfast'),
+    ('pancake', 'desc_meal_4', 4.25, 'ebreakfast'),
+    ('pizza', 'desc_meal_5', 15.25, 'ebreakfast'),
+    ('toast', 'desc_meal_6', 3.25, 'ebreakfast'),
     ('meal_id_7', 'desc_meal_7', 7.25, 'ebreakfast'),
     ('meal_id_8', 'desc_meal_8', 8.25, 'ebreakfast'),
     ('meal_id_9', 'desc_meal_9', 9.25, 'ebreakfast');
 
 -- ORDERS
 
-INSERT INTO orders (customer_fk)
-VALUES
-	('customer_id_1'),
-	('customer_id_2'),
-	('customer_id_3'),
-	('customer_id_4'),
-	('customer_id_5'),
-	('customer_id_6'),
-	('customer_id_7'),
-	('customer_id_8'),
-	('customer_id_9');
+-- INSERT INTO orders (customer_fk)
+-- VALUES
+-- 	('customer_id_1'),
+-- 	('customer_id_2'),
+-- 	('customer_id_3'),
+-- 	('customer_id_4'),
+-- 	('customer_id_5'),
+-- 	('customer_id_6'),
+-- 	('customer_id_7'),
+-- 	('customer_id_8'),
+-- 	('customer_id_9');
 	
-INSERT INTO ordermeals (order_fk, meal_fk)
-VALUES
-	(1, 'meal_id_1'),
-	(2, 'meal_id_2'),
-	(3, 'meal_id_3'),
-	(4, 'meal_id_4'),
-	(5, 'meal_id_5'),
-	(6, 'meal_id_6'),
-	(7, 'meal_id_7'),
-	(8, 'meal_id_8'),
-	(9, 'meal_id_9');
+-- INSERT INTO ordermeals (order_fk, meal_fk)
+-- VALUES
+-- 	(1, 'meal_id_1'),
+-- 	(2, 'meal_id_2'),
+-- 	(3, 'meal_id_3'),
+-- 	(4, 'meal_id_4'),
+-- 	(5, 'meal_id_5'),
+-- 	(6, 'meal_id_6'),
+-- 	(7, 'meal_id_7'),
+-- 	(8, 'meal_id_8'),
+-- 	(9, 'meal_id_9');
 
 
