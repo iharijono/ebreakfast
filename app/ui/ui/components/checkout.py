@@ -47,11 +47,12 @@ def Overview(user):
                         quantity = o.quantity
                         if quantity > 0:
                             subtotal = int(quantity) * price
+                            subtotal_str = '{0:.2f}'.format(subtotal)
                             solara.Markdown(f"{cnt}")
                             solara.Markdown(f"{name}")
                             solara.Markdown(f"${price}")
                             solara.Markdown(f"{quantity}")
-                            solara.Markdown(f"${subtotal}")
+                            solara.Markdown(f"${subtotal_str}")
                             total += subtotal
                             cnt += 1
                         else:
@@ -60,7 +61,8 @@ def Overview(user):
                     solara.Markdown(f"")
                     solara.Markdown(f"")
                     solara.Markdown(f"# TOTAL")
-                    solara.Markdown(f"# ${total}")
+                    total_str = '{0:.2f}'.format(total)
+                    solara.Markdown(f"# ${total_str}")
                     
                     solara.Markdown(f"")
                     solara.Markdown(f"")
