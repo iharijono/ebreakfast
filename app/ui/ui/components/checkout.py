@@ -1,12 +1,21 @@
 import reacton.ipyvuetify as rv
 import solara
 
-from .order import QUANTITY, ORDER
+from .order import QUANTITY, ORDER, order, order_submitted
 from ..models import models
 
 USER = None
 order_purchased = solara.reactive(False)
 order_nr = solara.reactive(0)
+
+def clear_order():
+    print("Clear Order")
+    for k, v in QUANTITY.items():
+        QUANTITY[k].value = 0
+    if order:    
+        for m in order.menuitems:
+            m.quantity = 0 
+
 @solara.component
 def Overview(user):
     global USER
@@ -73,6 +82,8 @@ def Overview(user):
                 if order_purchased.value:
                     u = USER.value
                     solara.Text(f"Order for user '{u.username}' with Nr {order_nr.value} is submitted successfully")
-
+                    order_submitted.value = False
+                    QUANTITY = {}
+                    clear_order()
 
     return main
